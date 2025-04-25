@@ -1,12 +1,20 @@
 import './App.css';
+import { Link, Routes, Route } from 'react-router-dom';
+import { routes } from './routes.tsx';
 
 function App() {
   return (
-    <>
-      <div className='min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center'>
-        <h1 className='text-4xl font-bold'>Tailwind працює 🎉</h1>
-      </div>
-    </>
+    <div>
+      <nav className='flex gap-4 p-4 bg-gray-200'>
+        <Link to='/'>Home</Link>
+        <Link to='/dashboard'>Dashboard</Link>
+      </nav>
+      <Routes>
+        {routes.map((route, index) => (
+          <Route key={index} path={route.path} element={route.element} />
+        ))}
+      </Routes>
+    </div>
   );
 }
 
