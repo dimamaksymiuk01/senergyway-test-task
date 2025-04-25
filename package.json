@@ -21,6 +21,9 @@
     "react-router-dom": "^7.5.2"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.31.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-react": "^7.37.5",
     "@eslint/eslintrc": "^3",
     "@eslint/js": "^9.22.0",
     "@tailwindcss/postcss": "^4.1.4",
@@ -32,7 +35,8 @@
     "eslint": "^8.57.1",
     "eslint-config-next": "^15.2.2",
     "eslint-config-prettier": "^10.1.1",
-    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-define-config": "^2.1.0",
+    "eslint-plugin-prettier": "^5.2.6",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
