@@ -1,5 +1,5 @@
 import './App.css';
-import {  Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { routes } from './routes.tsx';
 
 function App() {
