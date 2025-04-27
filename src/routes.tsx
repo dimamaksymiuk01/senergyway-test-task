@@ -1,6 +1,6 @@
-import { Dashboard, Home } from '@/pages';
+import { Dashboard } from '@/pages';
 
 export const routes = [
-  { path: '/', element: <Home /> },
-  { path: '/dashboard', element: <Dashboard /> },
+  { path: '/', element: <Dashboard /> },
+  // { path: '/dashboard', element: <Dashboard /> },
 ];
