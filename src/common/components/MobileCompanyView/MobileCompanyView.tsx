@@ -5,9 +5,13 @@ import { CompanyInfoPanel } from '@/common/components/CompanyInfoPanel/CompanyIn
 
 interface MobileCompanyViewProps {
   currentCompanies: CompanyId[];
+  visibleFieldsMap?: Record<CompanyId, string[]>;
 }
 
-export const MobileCompanyView: FC<MobileCompanyViewProps> = ({ currentCompanies }) => {
+export const MobileCompanyView: FC<MobileCompanyViewProps> = ({
+  currentCompanies,
+  visibleFieldsMap = {},
+}) => {
   return (
     <div className='flex flex-col gap-4 p-2'>
       {currentCompanies.map((id) => (
@@ -16,7 +20,7 @@ export const MobileCompanyView: FC<MobileCompanyViewProps> = ({ currentCompanies
             <h3 className='font-medium'>Company info: {companiesDataInfo[id].ticker}</h3>
           </div>
           <div className='p-4'>
-            <CompanyInfoPanel companyId={id} />
+            <CompanyInfoPanel companyId={id} visibleFields={visibleFieldsMap[id]} />
           </div>
         </div>
       ))}

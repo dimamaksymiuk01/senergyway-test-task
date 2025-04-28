@@ -12,6 +12,14 @@ export interface CompanyData {
   latestFilingDate: string;
   incCountry: string;
   employees: number;
+  sector: string;
+  industryCategory: string;
+  industryGroup: string;
+  firstStockPriceDate: string;
+  lastStockPriceDate: string;
+  legacySector: string;
+  legacyIndustryCategory: string;
+  legacyIndustryGroup: string;
   mosaicPositioning?: {
     defaultVisible?: boolean;
     initialOrder?: number;

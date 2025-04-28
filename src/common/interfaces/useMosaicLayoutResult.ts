@@ -8,10 +8,8 @@ export interface UseMosaicLayoutProps {
 
 export interface UseMosaicLayoutResult {
   layout: MosaicNode<CompanyId> | null;
-  previousLayout: MosaicNode<CompanyId> | null;
   activeWindows: CompanyId[];
   fullScreenWindow: CompanyId | null;
-  isDragging: boolean;
   closeWindow: (id: CompanyId) => void;
   restoreWindow: (id: CompanyId) => void;
   enterFullScreen: (id: CompanyId) => void;
