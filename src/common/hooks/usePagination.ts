@@ -16,7 +16,6 @@ export const usePagination = ({
   const totalItems = Object.keys(companiesDataInfo).length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-  // Get current page from URL on load
   useEffect(() => {
     const url = new URL(window.location.href);
     const pageFromUrl = Number(url.searchParams.get('page')) || 1;
@@ -24,23 +23,19 @@ export const usePagination = ({
     if (pageFromUrl >= 1 && pageFromUrl <= totalPages) {
       setCurrentPage(pageFromUrl);
     } else if (pageFromUrl > totalPages) {
-      // If page is greater than total, redirect to last page
       setCurrentPage(totalPages);
       updatePageUrl(totalPages);
     } else {
-      // If invalid page, set to first
       setCurrentPage(1);
       updatePageUrl(1);
     }
   }, [totalPages]);
 
-  // Add listener for browser back/forward buttons
   useEffect(() => {
     const handlePopState = (event: PopStateEvent) => {
       if (event.state && event.state.page) {
         setCurrentPage(event.state.page);
       } else {
-        // If no state, check URL
         const url = new URL(window.location.href);
         const pageFromUrl = Number(url.searchParams.get('page')) || 1;
         setCurrentPage(pageFromUrl);
@@ -53,7 +48,6 @@ export const usePagination = ({
     };
   }, []);
 
-  // Filtered companies for current page
   const currentItems = useMemo(() => {
     return Object.entries(companiesDataInfo)
       .sort(([_, companyA], [__, companyB]) => {
@@ -65,7 +59,6 @@ export const usePagination = ({
       .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   }, [currentPage, itemsPerPage]);
 
-  // Page change handlers
   const handlePrevPage = () => {
     if (currentPage > 1) {
       const newPage = currentPage - 1;

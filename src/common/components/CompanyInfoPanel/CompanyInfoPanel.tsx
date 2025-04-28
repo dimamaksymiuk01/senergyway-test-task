@@ -1,70 +1,42 @@
-import { CompanyId } from '@/common/types';
 import { FC } from 'react';
 import { companiesDataInfo } from '@/common/constants';
+import { CompanyId } from '@/common/types';
 
-export const CompanyInfoPanel: FC<{ companyId: CompanyId }> = ({ companyId }) => {
+interface CompanyInfoPanelProps {
+  companyId: CompanyId;
+  visibleFields?: string[];
+}
+
+export const CompanyInfoPanel: FC<CompanyInfoPanelProps> = ({
+  companyId,
+  visibleFields,
+}) => {
   const company = companiesDataInfo[companyId];
 
+  const fieldsToShow =
+    visibleFields || Object.keys(company).filter((key) => key !== 'mosaicPositioning');
+
   return (
-    <div className='p-4 h-full overflow-auto'>
-      <div className='mb-4'>
-        <span className='font-bold mr-2'>ticker</span>
-        <span>{company.ticker}</span>
-      </div>
+    <div className='p-4 overflow-auto h-full'>
+      <div className='grid grid-cols-1 gap-3'>
+        {fieldsToShow.map((field) => {
+          const value = company[field as keyof typeof company];
 
-      <div className='mb-4'>
-        <span className='font-bold mr-2'>Name:</span>
-        <span>{company.name}</span>
-      </div>
-
-      <div className='mb-4'>
-        <span className='font-bold mr-2'>Legal name:</span>
-        <span>{company.legalName}</span>
-      </div>
-
-      <div className='mb-4'>
-        <span className='font-bold mr-2'>Stock exchange:</span>
-        <span>{company.stockExchange}</span>
-      </div>
-
-      <div className='mb-4'>
-        <span className='font-bold mr-2'>Short description:</span>
-        <span>{company.shortDescription}</span>
-      </div>
-
-      <div className='mb-4'>
-        <span className='font-bold mr-2'>Web:</span>
-        <span>{company.web}</span>
-      </div>
-
-      <div className='mb-4'>
-        <span className='font-bold mr-2'>Business address:</span>
-        <span>{company.businessAddress}</span>
-      </div>
-
-      <div className='mb-4'>
-        <span className='font-bold mr-2'>Business phone:</span>
-        <span>{company.businessPhone}</span>
-      </div>
-
-      <div className='mb-4'>
-        <span className='font-bold mr-2'>Entity legal form:</span>
-        <span>{company.entityLegalForm}</span>
-      </div>
-
-      <div className='mb-4'>
-        <span className='font-bold mr-2'>Latest filing date:</span>
-        <span>{company.latestFilingDate}</span>
-      </div>
-
-      <div className='mb-4'>
-        <span className='font-bold mr-2'>Inc country:</span>
-        <span>{company.incCountry}</span>
-      </div>
-
-      <div className='mb-4'>
-        <span className='font-bold mr-2'>Employees:</span>
-        <span>{company.employees}</span>
+          return (
+            <div key={field} className='border-b pb-2'>
+              <div className='font-medium text-sm text-gray-500 mb-1'>{field}</div>
+              <div className='text-base'>
+                {typeof value === 'object' ? (
+                  <pre className='text-xs overflow-auto'>
+                    {JSON.stringify(value, null, 2)}
+                  </pre>
+                ) : (
+                  String(value)
+                )}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

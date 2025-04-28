@@ -6,4 +6,5 @@ export interface CompanyWindowControlsProps {
   closeWindow: (id: CompanyId) => void;
   enterFullScreen: (id: CompanyId) => void;
   exitFullScreen: () => void;
+  onVisibleFieldsChange?: (id: CompanyId, fields: string[]) => void;
 }

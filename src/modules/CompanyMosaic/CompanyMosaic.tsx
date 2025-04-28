@@ -3,7 +3,12 @@ import { Mosaic, MosaicWindow, MosaicBranch } from 'react-mosaic-component';
 import 'react-mosaic-component/react-mosaic-component.css';
 import { CompanyId } from '@/common/types';
 import { COMPANIES_PER_PAGE, companiesDataInfo } from '@/common/constants';
-import { useMediaQuery, useMosaicLayout, usePagination } from '@/common/hooks';
+import {
+  useLocalStorage,
+  useMediaQuery,
+  useMosaicLayout,
+  usePagination,
+} from '@/common/hooks';
 import {
   CompanyInfoPanel,
   CompanyWindowControls,
@@ -14,6 +19,10 @@ import {
 
 export const CompanyMosaic: FC = () => {
   const isMobile = useMediaQuery('(max-width: 768px)');
+
+  const [companyVisibleFields, setCompanyVisibleFields] = useLocalStorage<
+    Record<CompanyId, string[]>
+  >('company-visible-fields', {});
 
   const {
     currentPage,
@@ -35,6 +44,13 @@ export const CompanyMosaic: FC = () => {
     onChangeLayout,
   } = useMosaicLayout({ currentCompanies, isMobile });
 
+  const handleVisibleFieldsChange = (companyId: CompanyId, fields: string[]) => {
+    setCompanyVisibleFields((prev) => ({
+      ...prev,
+      [companyId]: fields,
+    }));
+  };
+
   const renderWindow = (id: CompanyId, path: MosaicBranch[]) => {
     const company = companiesDataInfo[id];
     const title = `Company info: ${company.ticker}`;
@@ -50,50 +66,51 @@ export const CompanyMosaic: FC = () => {
             closeWindow={closeWindow}
             enterFullScreen={enterFullScreen}
             exitFullScreen={exitFullScreen}
+            onVisibleFieldsChange={handleVisibleFieldsChange}
           />
         }
         draggable={!isMobile}
         createNode={() => id}
       >
-        <CompanyInfoPanel companyId={id} />
+        <CompanyInfoPanel companyId={id} visibleFields={companyVisibleFields[id]} />
       </MosaicWindow>
     );
   };
 
   return (
     <>
-      <MosaicToolbar
-        currentCompanies={currentCompanies}
-        activeWindows={activeWindows}
-        fullScreenWindow={fullScreenWindow}
-        restoreWindow={restoreWindow}
-        exitFullScreen={exitFullScreen}
-        resetLayout={resetLayout}
-        isMobile={isMobile}
-      />
+      <div className='flex items-center p-2.5'>
+        <MosaicToolbar
+          currentCompanies={currentCompanies}
+          activeWindows={activeWindows}
+          fullScreenWindow={fullScreenWindow}
+          restoreWindow={restoreWindow}
+          exitFullScreen={exitFullScreen}
+          resetLayout={resetLayout}
+          isMobile={isMobile}
+        />
 
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        handlePrevPage={handlePrevPage}
-        handleNextPage={handleNextPage}
-      />
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          handlePrevPage={handlePrevPage}
+          handleNextPage={handleNextPage}
+        />
+      </div>
 
       <div className='flex flex-col h-screen'>
         <div className='flex-grow relative'>
           {isMobile ? (
-            <MobileCompanyView currentCompanies={currentCompanies} />
+            <MobileCompanyView
+              currentCompanies={currentCompanies}
+              visibleFieldsMap={companyVisibleFields}
+            />
           ) : layout ? (
             <Mosaic<CompanyId>
               renderTile={(id, path) => renderWindow(id, path)}
               value={layout}
               onChange={onChangeLayout}
               className='mosaic-blueprint-theme'
-              zeroStateView={
-                <div className='flex items-center justify-center h-full text-gray-400'>
-                  Додайте компанію для відображення
-                </div>
-              }
               resize={{
                 minimumPaneSizePercentage: 10,
               }}
