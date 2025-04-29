@@ -17,10 +17,11 @@ import {
   Pagination,
 } from '@/common/components';
 import { useCompanies } from '@/common/contexts/CompaniesContext.tsx';
+import { Spinner } from '@/common/components/Spinner/Spinner.tsx';
 
 export const CompanyMosaic: FC = () => {
   const isMobile = useMediaQuery('(max-width: 768px)');
-  const { companiesData } = useCompanies();
+  const { companiesData, isLoading } = useCompanies();
 
   const [companyVisibleFields, setCompanyVisibleFields] = useLocalStorage<
     Record<CompanyId, string[]>
@@ -81,53 +82,62 @@ export const CompanyMosaic: FC = () => {
 
   return (
     <>
-      <div className='flex items-center p-2.5'>
-        <MosaicToolbar
-          currentCompanies={currentCompanies}
-          activeWindows={activeWindows}
-          fullScreenWindow={fullScreenWindow}
-          restoreWindow={restoreWindow}
-          exitFullScreen={exitFullScreen}
-          resetLayout={resetLayout}
-          isMobile={isMobile}
-        />
-
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          handlePrevPage={handlePrevPage}
-          handleNextPage={handleNextPage}
-        />
-      </div>
-
-      <div className='flex flex-col h-screen'>
-        <div className='flex-grow relative'>
-          {isMobile ? (
-            <MobileCompanyView
-              currentCompanies={currentCompanies}
-              visibleFieldsMap={companyVisibleFields}
-            />
-          ) : layout ? (
-            <Mosaic<CompanyId>
-              renderTile={(id, path) => renderWindow(id, path)}
-              value={layout}
-              onChange={onChangeLayout}
-              className='mosaic-blueprint-theme'
-              resize={{
-                minimumPaneSizePercentage: 10,
-              }}
-              onRelease={() => {
-                if (layout && activeWindows.length > 0) {
-                }
-              }}
-            />
-          ) : (
-            <div className='flex items-center justify-center h-full'>
-              <h1 className='text-3xl font-bold text-gray-400'>No Data</h1>
-            </div>
-          )}
+      {isLoading ? (
+        <div className='fixed inset-0 flex items-center justify-center bg-white/70 z-50'>
+          <Spinner size={50} />
         </div>
-      </div>
+      ) : (
+        <>
+          <div className='flex items-center p-2.5'>
+            <MosaicToolbar
+              currentCompanies={currentCompanies}
+              activeWindows={activeWindows}
+              fullScreenWindow={fullScreenWindow}
+              restoreWindow={restoreWindow}
+              exitFullScreen={exitFullScreen}
+              resetLayout={resetLayout}
+              isMobile={isMobile}
+            />
+
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              handlePrevPage={handlePrevPage}
+              handleNextPage={handleNextPage}
+            />
+          </div>
+
+          <div className='flex flex-col h-screen'>
+            <div className='flex-grow relative'>
+              {isMobile ? (
+                <MobileCompanyView
+                  currentCompanies={currentCompanies}
+                  visibleFieldsMap={companyVisibleFields}
+                />
+              ) : layout ? (
+                <Mosaic<CompanyId>
+                  renderTile={(id, path) => renderWindow(id, path)}
+                  value={layout}
+                  onChange={onChangeLayout}
+                  className='mosaic-blueprint-theme'
+                  resize={{
+                    minimumPaneSizePercentage: 10,
+                  }}
+                  onRelease={() => {
+                    if (layout && activeWindows.length > 0) {
+                      // optional: do something here
+                    }
+                  }}
+                />
+              ) : (
+                <div className='flex items-center justify-center h-full'>
+                  <h1 className='text-3xl font-bold text-gray-400'>No Data</h1>
+                </div>
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 };
