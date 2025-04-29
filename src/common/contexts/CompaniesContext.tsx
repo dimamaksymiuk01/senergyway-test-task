@@ -2,7 +2,7 @@ import { createContext, useContext, ReactNode, FC, useState, useEffect } from 'r
 import { CompanyData } from '@/common/interfaces';
 
 interface CompaniesContextType {
-  companiesData: { [ticker: string]: CompanyData }; // об'єкт, де ключ - це ticker компанії
+  companiesData: { [ticker: string]: CompanyData };
   isLoading: boolean;
   error: string | null;
 }
