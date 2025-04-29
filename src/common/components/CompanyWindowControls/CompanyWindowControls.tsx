@@ -92,6 +92,7 @@ export const CompanyWindowControls: FC<CompanyWindowControlsProps> = ({
             <DropdownMenuCheckboxItem
               key={field}
               checked={visibleFields[field]}
+              onSelect={(e) => e.preventDefault()}
               onCheckedChange={(checked) => handleFieldChange(field, checked)}
             >
               {field}
