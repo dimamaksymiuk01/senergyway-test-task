@@ -123,11 +123,6 @@ export const CompanyMosaic: FC = () => {
                   resize={{
                     minimumPaneSizePercentage: 10,
                   }}
-                  onRelease={() => {
-                    if (layout && activeWindows.length > 0) {
-                      // optional: do something here
-                    }
-                  }}
                 />
               ) : (
                 <div className='flex items-center justify-center h-full'>
