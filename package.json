@@ -14,8 +14,7 @@
      "eslint:fix": "eslint . --fix",
      "prettier": "prettier app --check",
      "prettier:fix": "prettier src --write",
-     "json-server": "json-server --watch db.json --port 5001 --host 0.0.0.0",
-     "dev:all": "concurrently \"npm run dev -- --host 0.0.0.0\" \"npm run json-server\""
+     "json-server": "json-server --watch db.json --port 5001 --host 0.0.0.0"
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.1.12",
