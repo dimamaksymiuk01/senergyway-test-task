@@ -4,11 +4,14 @@ import { MosaicNode } from 'react-mosaic-component';
 import { CompanyId } from '@/common/types';
 import { buildLayout, getVisibleCompanies } from '@/common/utils';
 import { useLocalStorage } from '@/common/hooks/useLocalStorage.ts';
+import { useCompanies } from '@/common/contexts/CompaniesContext.tsx';
 
 export const useMosaicLayout = ({
   currentCompanies,
   isMobile,
 }: UseMosaicLayoutProps): UseMosaicLayoutResult => {
+  const { companiesData } = useCompanies();
+
   const [savedLayout, setSavedLayout] = useLocalStorage<MosaicNode<CompanyId> | null>(
     'mosaic-layout',
     null,
@@ -28,7 +31,7 @@ export const useMosaicLayout = ({
     useLocalStorage<MosaicNode<CompanyId> | null>('previous-layout', null);
 
   useEffect(() => {
-    const visibleCompanies = getVisibleCompanies(currentCompanies);
+    const visibleCompanies = getVisibleCompanies(currentCompanies, companiesData); // <-- передаємо 2 аргументи
 
     if (!savedLayout || currentCompanies.some((id) => !savedActiveWindows.includes(id))) {
       const initial = visibleCompanies.length
@@ -38,7 +41,7 @@ export const useMosaicLayout = ({
       setSavedActiveWindows(visibleCompanies);
       setFullScreenWindow(null);
     }
-  }, [currentCompanies, isMobile]);
+  }, [currentCompanies, isMobile, companiesData]);
 
   const closeWindow = (id: CompanyId) => {
     if (fullScreenWindow === id) exitFullScreen();
@@ -107,7 +110,7 @@ export const useMosaicLayout = ({
   };
 
   const resetLayout = () => {
-    const visibleCompanies = getVisibleCompanies(currentCompanies);
+    const visibleCompanies = getVisibleCompanies(currentCompanies, companiesData);
     const initial = visibleCompanies.length
       ? buildLayout(visibleCompanies, isMobile)
       : null;
