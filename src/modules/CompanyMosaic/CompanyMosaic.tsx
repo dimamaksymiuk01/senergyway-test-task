@@ -15,9 +15,9 @@ import {
   MobileCompanyView,
   MosaicToolbar,
   Pagination,
+  Spinner,
 } from '@/common/components';
 import { useCompanies } from '@/common/contexts/CompaniesContext.tsx';
-import { Spinner } from '@/common/components/Spinner/Spinner.tsx';
 
 export const CompanyMosaic: FC = () => {
   const isMobile = useMediaQuery('(max-width: 768px)');
