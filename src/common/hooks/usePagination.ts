@@ -19,7 +19,9 @@ export const usePagination = ({
 
   useEffect(() => {
     const url = new URL(window.location.href);
-    const pageFromUrl = Number(url.searchParams.get('page')) || 1;
+    const pageFromUrl = Number(url.searchParams.get('page'));
+
+    if (totalPages === 0 || Number.isNaN(pageFromUrl)) return;
 
     if (pageFromUrl >= 1 && pageFromUrl <= totalPages) {
       setCurrentPage(pageFromUrl);
