@@ -18,8 +18,20 @@ export default defineConfig({
     cssCodeSplit: true,
   },
   server: {
+    host: true,
+    port: 5173,
     hmr: {
       overlay: false,
+    },
+    watch: {
+      usePolling: true,
+    },
+    proxy: {
+      '/api': {
+        target: 'http://json-server:80',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
     },
   },
 });
