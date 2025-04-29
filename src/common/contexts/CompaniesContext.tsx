@@ -20,31 +20,31 @@ export const CompaniesProvider: FC<CompaniesProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchCompaniesData = async () => {
-      try {
-        const response = await fetch('http://localhost:5001/companies');
-        if (!response.ok) {
-          throw new Error('Помилка завантаження даних');
-        }
-        const data = await response.json();
-
-        const companiesObject = data.reduce(
-          (acc: { [ticker: string]: CompanyData }, company: CompanyData) => {
-            acc[company.ticker] = company;
-            return acc;
-          },
-          {},
-        );
-
-        setCompaniesData(companiesObject);
-      } catch (err: any) {
-        setError(err.message || 'Не вдалося завантажити дані');
-      } finally {
-        setIsLoading(false);
+  const fetchCompaniesData = async () => {
+    try {
+      const response = await fetch('http://localhost:5001/companies');
+      if (!response.ok) {
+        throw new Error('Помилка завантаження даних');
       }
-    };
+      const data = await response.json();
 
+      const companiesObject = data.reduce(
+        (acc: { [ticker: string]: CompanyData }, company: CompanyData) => {
+          acc[company.ticker] = company;
+          return acc;
+        },
+        {},
+      );
+
+      setCompaniesData(companiesObject);
+    } catch (err: any) {
+      setError(err.message || 'Не вдалося завантажити дані');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchCompaniesData();
   }, []);
 
