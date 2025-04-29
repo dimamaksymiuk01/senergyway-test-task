@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Mosaic, MosaicWindow, MosaicBranch } from 'react-mosaic-component';
 import 'react-mosaic-component/react-mosaic-component.css';
 import { CompanyId } from '@/common/types';
-import { COMPANIES_PER_PAGE, companiesDataInfo } from '@/common/constants';
+import { COMPANIES_PER_PAGE } from '@/common/constants';
 import {
   useLocalStorage,
   useMediaQuery,
@@ -16,9 +16,11 @@ import {
   MosaicToolbar,
   Pagination,
 } from '@/common/components';
+import { useCompanies } from '@/common/contexts/CompaniesContext.tsx';
 
 export const CompanyMosaic: FC = () => {
   const isMobile = useMediaQuery('(max-width: 768px)');
+  const { companiesData } = useCompanies();
 
   const [companyVisibleFields, setCompanyVisibleFields] = useLocalStorage<
     Record<CompanyId, string[]>
@@ -52,8 +54,8 @@ export const CompanyMosaic: FC = () => {
   };
 
   const renderWindow = (id: CompanyId, path: MosaicBranch[]) => {
-    const company = companiesDataInfo[id];
-    const title = `Company info: ${company.ticker}`;
+    const company = companiesData[id];
+    const title = `Company info: ${company?.ticker}`;
 
     return (
       <MosaicWindow<CompanyId>

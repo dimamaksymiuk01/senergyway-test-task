@@ -1,7 +1,11 @@
 import { CompanyId } from '@/common/types';
-import { companiesDataInfo } from '@/common/constants';
+import { CompanyData } from '@/common/interfaces';
 
-export const getVisibleCompanies = (companies: CompanyId[]) =>
-  companies.filter(
-    (id) => companiesDataInfo[id].mosaicPositioning?.defaultVisible !== false,
+export const getVisibleCompanies = (
+  companies: CompanyId[],
+  companiesData: Record<CompanyId, CompanyData>,
+) => {
+  return companies?.filter(
+    (id) => companiesData?.[id]?.mosaicPositioning?.defaultVisible !== false,
   );
+};

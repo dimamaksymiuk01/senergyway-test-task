@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import { CompanyId } from '@/common/types';
-import { companiesDataInfo } from '@/common/constants';
 import { updatePageUrl } from '@/common/utils';
 import { UsePaginationResult } from '@/common/interfaces';
+import { useCompanies } from '@/common/contexts/CompaniesContext.tsx';
 
 interface UsePaginationProps {
   itemsPerPage: number;
@@ -12,8 +12,9 @@ export const usePagination = ({
   itemsPerPage,
 }: UsePaginationProps): UsePaginationResult => {
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const { companiesData } = useCompanies();
 
-  const totalItems = Object.keys(companiesDataInfo).length;
+  const totalItems = Object?.keys(companiesData ?? {})?.length ?? 0;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   useEffect(() => {
@@ -33,7 +34,7 @@ export const usePagination = ({
 
   useEffect(() => {
     const handlePopState = (event: PopStateEvent) => {
-      if (event.state && event.state.page) {
+      if (event?.state?.page) {
         setCurrentPage(event.state.page);
       } else {
         const url = new URL(window.location.href);
@@ -49,15 +50,15 @@ export const usePagination = ({
   }, []);
 
   const currentItems = useMemo(() => {
-    return Object.entries(companiesDataInfo)
-      .sort(([_, companyA], [__, companyB]) => {
-        const orderA = companyA.mosaicPositioning?.initialOrder || 999;
-        const orderB = companyB.mosaicPositioning?.initialOrder || 999;
+    return Object?.entries(companiesData ?? {})
+      ?.sort(([_, companyA], [__, companyB]) => {
+        const orderA = companyA?.mosaicPositioning?.initialOrder ?? 999;
+        const orderB = companyB?.mosaicPositioning?.initialOrder ?? 999;
         return orderA - orderB;
       })
-      .map(([id]) => id as CompanyId)
-      .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-  }, [currentPage, itemsPerPage]);
+      ?.map(([id]) => id as CompanyId)
+      ?.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  }, [currentPage, itemsPerPage, companiesData]);
 
   const handlePrevPage = () => {
     if (currentPage > 1) {
