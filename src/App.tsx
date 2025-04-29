@@ -1,12 +1,12 @@
 import './normalize.css';
-import { CompanyMosaic } from '@/modules';
 import { CompaniesProvider } from '@/common/contexts/CompaniesContext.tsx';
+import { Dashboard } from '@/pages';
 
 function App() {
   return (
     <>
       <CompaniesProvider>
-        <CompanyMosaic />
+        <Dashboard />
       </CompaniesProvider>
       ;
     </>

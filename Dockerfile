@@ -9,4 +9,4 @@ FROM node:18
 WORKDIR /app
 RUN npm install -g serve
 COPY --from=builder /app/dist ./dist
-CMD ["serve", "-s", "dist", "-l", "5173"]  ʼ
+CMD ["serve", "-s", "dist", "-l", "4173"]  ʼ
