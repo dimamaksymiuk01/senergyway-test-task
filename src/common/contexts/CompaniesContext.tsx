@@ -23,9 +23,7 @@ export const CompaniesProvider: FC<CompaniesProviderProps> = ({ children }) => {
   const fetchCompaniesData = async () => {
     try {
       const response = await fetch('http://localhost:5001/companies');
-      if (!response.ok) {
-        throw new Error('Помилка завантаження даних');
-      }
+
       const data = await response.json();
 
       const companiesObject = data.reduce(
@@ -38,7 +36,7 @@ export const CompaniesProvider: FC<CompaniesProviderProps> = ({ children }) => {
 
       setCompaniesData(companiesObject);
     } catch (err: any) {
-      setError(err.message || 'Не вдалося завантажити дані');
+      setError(err.message);
     } finally {
       setIsLoading(false);
     }
@@ -58,7 +56,7 @@ export const CompaniesProvider: FC<CompaniesProviderProps> = ({ children }) => {
 export const useCompanies = () => {
   const context = useContext(CompaniesContext);
   if (!context) {
-    throw new Error('useCompanies must be used within a CompaniesProvider');
+    throw new Error('error');
   }
   return context;
 };
